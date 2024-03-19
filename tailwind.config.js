@@ -10,6 +10,9 @@ export default {
         charcoal: "#333",
         "steel-gray": "#808080",
       },
+      boxShadowColor: {
+        white: "#ffffff55",
+      },
     },
   },
   plugins: [],

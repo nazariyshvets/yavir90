@@ -1,9 +1,9 @@
-import SectionTitle from "./SectionTitle.tsx";
-import Project from "./Project.tsx";
-import project from "../data.ts";
+import SectionTitle from "./SectionTitle";
+import Project from "./Project";
+import project from "../data";
 
 const ProjectsList = () => (
-  <section>
+  <section className="p-4 sm:px-12 xl:px-24">
     <SectionTitle>Проєкти</SectionTitle>
     <Project project={project} />
   </section>
