@@ -1,17 +1,13 @@
 import { BiPhone } from "react-icons/bi";
 
-import SectionTitle from "./SectionTitle";
+import Section from "./Section";
 
 const Contacts = () => (
-  <section className="p-4 sm:px-12 xl:px-24">
-    <SectionTitle>Контакти</SectionTitle>
-
-    <div>
-      <div className="flex items-center">
-        <BiPhone /> +38 050 980 25 00
-      </div>
+  <Section title="Контакти">
+    <div className="flex items-center gap-2 text-lg sm:text-xl xl:text-2xl">
+      <BiPhone /> <span>+380 50 980 2500</span>
     </div>
-  </section>
+  </Section>
 );
 
 export default Contacts;

@@ -12,13 +12,15 @@ interface ApartmentDetailProps {
   type: "rooms" | "section" | "area" | "release" | "floors" | "status";
 }
 
+const iconStyles = "h-5 w-5 fill-primary";
+
 const typeIconMap = {
-  rooms: <BiBed className="h-5 w-5 fill-primary" />,
-  section: <BiCubeAlt className="h-5 w-5 fill-primary" />,
-  area: <BiFullscreen className="h-5 w-5 fill-primary" />,
-  release: <BiCalendarCheck className="h-5 w-5 fill-primary" />,
-  floors: <BiBuilding className="h-5 w-5 fill-primary" />,
-  status: <BiHardHat className="h-5 w-5 fill-primary" />,
+  rooms: <BiBed className={iconStyles} />,
+  section: <BiCubeAlt className={iconStyles} />,
+  area: <BiFullscreen className={iconStyles} />,
+  release: <BiCalendarCheck className={iconStyles} />,
+  floors: <BiBuilding className={iconStyles} />,
+  status: <BiHardHat className={iconStyles} />,
 };
 
 const ApartmentDetail = ({
@@ -27,7 +29,7 @@ const ApartmentDetail = ({
 }: PropsWithChildren<ApartmentDetailProps>) => (
   <div className="flex items-center gap-2">
     {typeIconMap[type]}
-    {children}
+    <div>{children}</div>
   </div>
 );
 
