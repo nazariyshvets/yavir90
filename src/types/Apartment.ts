@@ -6,6 +6,7 @@ interface Apartment {
   releaseDate: string;
   floors: string;
   status: string;
+  imgUrl: string;
 }
 
 export default Apartment;

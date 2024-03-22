@@ -3,7 +3,7 @@ import Project from "./Project";
 import project from "../data";
 
 const ProjectsList = () => (
-  <Section title="Проєкти">
+  <Section id="projects" title="Проєкти">
     <Project project={project} />
   </Section>
 );

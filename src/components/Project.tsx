@@ -1,6 +1,10 @@
+import { useState } from "react";
+
 import Carousel from "antd/lib/carousel";
+import { BiPlayCircle } from "react-icons/bi";
 
 import ApartmentDetail from "./ApartmentDetail";
+import Modal from "./Modal";
 import groupApartmentsByRoomsCount from "../utils";
 import ProjectType from "../types/Project";
 
@@ -9,6 +13,8 @@ interface ProjectProps {
 }
 
 const Project = ({ project }: ProjectProps) => {
+  const [isModalOpened, setIsModalOpened] = useState(false);
+
   const groupedApartments = groupApartmentsByRoomsCount(project.apartments);
 
   const apartmentsView = Object.keys(groupedApartments).map((key) => (
@@ -23,7 +29,11 @@ const Project = ({ project }: ProjectProps) => {
       <Carousel dotPosition="top" className="overflow-hidden rounded">
         {groupedApartments[key].map((apartment, i) => (
           <div key={i}>
-            <div className="h-48 bg-primary xl:h-60"></div>
+            <img
+              src={apartment.imgUrl}
+              alt="planning"
+              className="h-48 w-full object-contain xl:h-60"
+            />
 
             <div className="p-2 sm:p-3 xl:p-4">
               <h3 className="text-lg font-medium text-primary sm:text-xl xl:text-2xl">
@@ -102,7 +112,17 @@ const Project = ({ project }: ProjectProps) => {
 
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full px-10 xl:px-20">
-            <div className="h-48 w-full rounded bg-primary shadow-lg shadow-white xl:h-60"></div>
+            <div
+              className="video-wrapper relative flex cursor-pointer items-center justify-center"
+              onClick={() => setIsModalOpened(true)}
+            >
+              <img
+                src="photo_05.png"
+                alt="video"
+                className="h-48 w-full rounded bg-primary object-cover shadow-lg shadow-white xl:h-60"
+              />
+              <BiPlayCircle className="play-icon absolute text-4xl transition-colors sm:text-5xl xl:text-6xl" />
+            </div>
           </div>
         </div>
       </div>
@@ -116,6 +136,10 @@ const Project = ({ project }: ProjectProps) => {
           {apartmentsView}
         </div>
       </div>
+
+      {isModalOpened && (
+        <Modal url="/video.mp4" onClose={() => setIsModalOpened(false)} />
+      )}
     </div>
   );
 };

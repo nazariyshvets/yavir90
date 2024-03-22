@@ -10,6 +10,46 @@
     color: #fff;
 }
 
+::-webkit-scrollbar {
+    width: 1rem;
+    height: 1rem;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #151515;
+}
+
+::-webkit-scrollbar-thumb {
+    border: 4px solid transparent;
+    border-radius: 9999px;
+    background-color: #808080;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: #151515;
+}
+
+* {
+    scrollbar-color: #808080 #151515;
+}
+
+@media screen and (max-width: 640px) {
+    ::-webkit-scrollbar {
+        width: 0.7rem;
+        height: 0.7rem;
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     background-color: #151515;
+}
+
+.header-link:hover .header-link-icon,
+.video-wrapper:hover .play-icon {
+    fill: #ffa500;
 }
