@@ -12,8 +12,19 @@ interface ProjectProps {
   project: ProjectType;
 }
 
+interface ModalState {
+  isOpened: boolean;
+  type: "img" | "video";
+  url?: string;
+}
+
 const Project = ({ project }: ProjectProps) => {
-  const [isModalOpened, setIsModalOpened] = useState(false);
+  const [modalState, setModalState] = useState<ModalState>();
+
+  const handleModalOpen = (type: "img" | "video", url?: string) =>
+    setModalState({ isOpened: true, type, url });
+
+  const handleModalClose = () => setModalState(undefined);
 
   const groupedApartments = groupApartmentsByRoomsCount(project.apartments);
 
@@ -32,7 +43,8 @@ const Project = ({ project }: ProjectProps) => {
             <img
               src={apartment.imgUrl}
               alt="planning"
-              className="h-48 w-full object-contain xl:h-60"
+              className="h-48 w-full cursor-pointer object-contain xl:h-60"
+              onClick={() => handleModalOpen("img", apartment.imgUrl)}
             />
 
             <div className="p-2 sm:p-3 xl:p-4">
@@ -78,21 +90,14 @@ const Project = ({ project }: ProjectProps) => {
       <div className="flex flex-col gap-8 sm:flex-row">
         <div className="flex flex-1 flex-col overflow-hidden rounded bg-charcoal shadow-lg shadow-white">
           <Carousel autoplay>
-            {/*{project.photoUrls.map((url) => (*/}
-            {/*  <img*/}
-            {/*    key={url}*/}
-            {/*    src={url}*/}
-            {/*    alt="building"*/}
-            {/*    className="h-48 w-full object-cover xl:h-60"*/}
-            {/*  />*/}
-            {/*))}*/}
-            {Array.from({ length: 5 }, (_, i) => (
-              <div
-                key={i}
-                className="h-48 w-full bg-primary text-2xl font-medium text-black xl:h-60"
-              >
-                {i + 1}
-              </div>
+            {project.photoUrls.map((url) => (
+              <img
+                key={url}
+                src={url}
+                alt="building"
+                className="h-48 w-full cursor-pointer object-cover xl:h-60"
+                onClick={() => handleModalOpen("img", url)}
+              />
             ))}
           </Carousel>
 
@@ -114,12 +119,12 @@ const Project = ({ project }: ProjectProps) => {
           <div className="w-full px-10 xl:px-20">
             <div
               className="video-wrapper relative flex cursor-pointer items-center justify-center"
-              onClick={() => setIsModalOpened(true)}
+              onClick={() => handleModalOpen("video", project.videoUrl)}
             >
               <img
-                src="photo_05.png"
+                src="/building.webp"
                 alt="video"
-                className="h-48 w-full rounded bg-primary object-cover shadow-lg shadow-white xl:h-60"
+                className="h-48 w-full rounded object-cover shadow-lg shadow-white xl:h-60"
               />
               <BiPlayCircle className="play-icon absolute text-4xl transition-colors sm:text-5xl xl:text-6xl" />
             </div>
@@ -137,8 +142,12 @@ const Project = ({ project }: ProjectProps) => {
         </div>
       </div>
 
-      {isModalOpened && (
-        <Modal url="/video.mp4" onClose={() => setIsModalOpened(false)} />
+      {modalState?.isOpened && (
+        <Modal
+          type={modalState.type}
+          url={modalState.url}
+          onClose={handleModalClose}
+        />
       )}
     </div>
   );

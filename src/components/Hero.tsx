@@ -4,7 +4,7 @@ const Hero = () => (
     className="relative flex min-h-screen flex-col items-center justify-center gap-8 px-4 pb-20 sm:gap-10 sm:px-12 xl:gap-12 xl:px-24"
   >
     <img
-      src="/photo_05.png"
+      src="/building.webp"
       alt="building"
       className="absolute left-0 top-0 -z-20 h-full w-full object-cover"
     />

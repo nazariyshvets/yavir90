@@ -1,4 +1,4 @@
-import Apartment from "./Apartment.ts";
+import Apartment from "./Apartment";
 
 interface Project {
   photoUrls: string[];
@@ -6,6 +6,7 @@ interface Project {
   address: string;
   startPricePerSquareMeter: number;
   apartments: Apartment[];
+  videoUrl?: string;
 }
 
 export default Project;

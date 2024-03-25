@@ -1,10 +1,18 @@
 import Section from "./Section";
 import Project from "./Project";
-import project from "../data";
+import ProjectType from "../types/Project";
 
-const ProjectsList = () => (
+interface ProjectsListProps {
+  projects: ProjectType[];
+}
+
+const ProjectsList = ({ projects }: ProjectsListProps) => (
   <Section id="projects" title="Проєкти">
-    <Project project={project} />
+    <div className="flex flex-col gap-12">
+      {projects.map((project) => (
+        <Project key={project.name} project={project} />
+      ))}
+    </div>
   </Section>
 );
 

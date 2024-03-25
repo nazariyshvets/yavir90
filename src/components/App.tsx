@@ -1,12 +1,10 @@
-import MainPage from "../pages/MainPage.tsx";
-import HomePage from "../pages/HomePage.tsx";
+import MainPage from "../pages/MainPage";
+import HomePage from "../pages/HomePage";
 
-const App = () => {
-  return (
-    <MainPage>
-      <HomePage />
-    </MainPage>
-  );
-};
+const App = () => (
+  <MainPage>
+    <HomePage />
+  </MainPage>
+);
 
 export default App;

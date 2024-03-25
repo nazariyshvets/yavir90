@@ -1,4 +1,4 @@
-import Apartment from "./types/Apartment.ts";
+import Apartment from "./types/Apartment";
 
 const groupApartmentsByRoomsCount = (apartments: Apartment[]) => {
   const groupedApartments: Record<string, Apartment[]> = {};
