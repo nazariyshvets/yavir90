@@ -22,49 +22,64 @@ const HomePage = () => {
         const querySnapshot = await getDocs(collection(db, "projects"));
         const projectsData: Project[] = [];
 
-        for (const doc of querySnapshot.docs) {
-          const project = doc.data() as Project;
-          let videoUrl;
+        await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const project = doc.data() as Project;
+            const photoUrlPromises: Promise<string>[] = [];
+            const apartmentImgUrlPromises: Promise<string>[] = [];
 
-          const photoUrlsWithUrls = await Promise.all(
-            project.photoUrls.map(async (photoUrl) => {
-              try {
-                return await getDownloadURL(ref(storage, `images/${photoUrl}`));
-              } catch (err) {
-                console.log(err);
+            project.photoUrls.forEach((photoUrl) => {
+              photoUrlPromises.push(
+                getDownloadURL(ref(storage, `images/${photoUrl}`)),
+              );
+            });
+
+            project.apartments.forEach((apartment) => {
+              apartmentImgUrlPromises.push(
+                getDownloadURL(ref(storage, `images/${apartment.imgUrl}`)),
+              );
+            });
+
+            const [photoUrlsWithUrls, apartmentImgUrlsWithUrls, videoUrl] =
+              await Promise.all([
+                Promise.allSettled(photoUrlPromises),
+                Promise.allSettled(apartmentImgUrlPromises),
+                project.videoUrl
+                  ? getDownloadURL(
+                      ref(storage, `videos/${project.videoUrl}`),
+                    ).catch(() => null)
+                  : null,
+              ]);
+
+            const photoUrlMap: Record<string, string> = {};
+            project.photoUrls.forEach((url, index) => {
+              if (photoUrlsWithUrls[index].status === "fulfilled") {
+                photoUrlMap[url] = (
+                  photoUrlsWithUrls[index] as PromiseFulfilledResult<string>
+                ).value;
               }
-            }),
-          );
+            });
 
-          const apartmentsWithUrls = await Promise.all(
-            project.apartments.map(async (apartment) => {
-              try {
-                const imgUrl = await getDownloadURL(
-                  ref(storage, `images/${apartment.imgUrl}`),
-                );
-                return { ...apartment, imgUrl };
-              } catch (err) {
-                console.log(err);
-                return apartment;
-              }
-            }),
-          );
+            const updatedProject: Project = {
+              ...project,
+              photoUrls: project.photoUrls.map((url) => photoUrlMap[url]),
+              apartments: project.apartments.map((apartment, index) => ({
+                ...apartment,
+                imgUrl:
+                  apartmentImgUrlsWithUrls[index].status === "fulfilled"
+                    ? (
+                        apartmentImgUrlsWithUrls[
+                          index
+                        ] as PromiseFulfilledResult<string>
+                      ).value
+                    : null,
+              })),
+              videoUrl: videoUrl ?? null,
+            };
 
-          try {
-            videoUrl = await getDownloadURL(
-              ref(storage, `videos/${project.videoUrl}`),
-            );
-          } catch (err) {
-            console.log(err);
-          }
-
-          projectsData.push({
-            ...project,
-            apartments: apartmentsWithUrls,
-            photoUrls: photoUrlsWithUrls.filter(Boolean) as string[],
-            videoUrl,
-          });
-        }
+            projectsData.push(updatedProject);
+          }),
+        );
 
         setProjects(projectsData);
       } catch (err) {

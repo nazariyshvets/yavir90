@@ -41,10 +41,12 @@ const Project = ({ project }: ProjectProps) => {
         {groupedApartments[key].map((apartment, i) => (
           <div key={i}>
             <img
-              src={apartment.imgUrl}
+              src={apartment.imgUrl || "/noImage.svg"}
               alt="planning"
               className="h-48 w-full cursor-pointer object-contain xl:h-60"
-              onClick={() => handleModalOpen("img", apartment.imgUrl)}
+              onClick={() =>
+                apartment.imgUrl && handleModalOpen("img", apartment.imgUrl)
+              }
             />
 
             <div className="p-2 sm:p-3 xl:p-4">
@@ -119,14 +121,18 @@ const Project = ({ project }: ProjectProps) => {
           <div className="w-full px-10 xl:px-20">
             <div
               className="video-wrapper relative flex cursor-pointer items-center justify-center"
-              onClick={() => handleModalOpen("video", project.videoUrl)}
+              onClick={() =>
+                project.videoUrl && handleModalOpen("video", project.videoUrl)
+              }
             >
               <img
                 src="/building.webp"
                 alt="video"
                 className="h-48 w-full rounded object-cover shadow-lg shadow-white xl:h-60"
               />
-              <BiPlayCircle className="play-icon absolute text-4xl transition-colors sm:text-5xl xl:text-6xl" />
+              {project.videoUrl && (
+                <BiPlayCircle className="play-icon absolute text-4xl transition-colors sm:text-5xl xl:text-6xl" />
+              )}
             </div>
           </div>
         </div>

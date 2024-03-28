@@ -6,7 +6,7 @@ interface Project {
   address: string;
   startPricePerSquareMeter: number;
   apartments: Apartment[];
-  videoUrl?: string;
+  videoUrl: string | null;
 }
 
 export default Project;

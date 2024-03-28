@@ -6,11 +6,11 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between bg-charcoal p-4 sm:px-12 xl:px-24">
-      <a
-        href="#hero"
-        className="text-xl font-bold text-primary sm:text-2xl xl:text-3xl"
-      >
-        Явір-90
+      <a href="#hero" className="flex items-center gap-2">
+        <img src="/logo.png" alt="logo" className="h-7 sm:h-8 xl:h-9" />{" "}
+        <span className="font-tektur text-xl font-medium text-primary sm:text-2xl xl:text-3xl">
+          Явір-90
+        </span>
       </a>
       <button
         className="sm:hidden"
