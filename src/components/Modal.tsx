@@ -57,7 +57,7 @@ const Modal = ({ type, url, onClose }: ModalProps) => {
   const mediaItemAttrs = {
     src: url,
     className:
-      "max-h-full w-full h-full max-w-full rounded object-contain overflow-hidden",
+      "max-h-full w-full h-full max-w-full rounded object-contain overflow-hidden bg-white",
     draggable: false,
   };
 

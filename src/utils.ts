@@ -1,19 +1,40 @@
 import Apartment from "./types/Apartment";
+import ApartmentPlanning from "./types/ApartmentPlanning";
 
 const groupApartmentsByRoomsCount = (apartments: Apartment[]) => {
   const groupedApartments: Record<string, Apartment[]> = {};
 
   apartments.forEach((apartment) => {
     const { roomsCount } = apartment;
-    const roomsCountStringified = roomsCount.toString();
+    const stringifiedRoomsCount = roomsCount.toString();
 
-    if (!groupedApartments[roomsCountStringified]) {
-      groupedApartments[roomsCountStringified] = [];
+    if (!groupedApartments[stringifiedRoomsCount]) {
+      groupedApartments[stringifiedRoomsCount] = [];
     }
-    groupedApartments[roomsCountStringified].push(apartment);
+
+    groupedApartments[stringifiedRoomsCount].push(apartment);
   });
 
   return groupedApartments;
 };
 
-export default groupApartmentsByRoomsCount;
+const groupApartmentPlanningsBySection = (
+  apartmentPlannings: ApartmentPlanning[],
+) => {
+  const groupedPlannings: Record<string, ApartmentPlanning[]> = {};
+
+  apartmentPlannings.forEach((planning) => {
+    const { section } = planning;
+    const stringifiedSection = section.toString();
+
+    if (!groupedPlannings[stringifiedSection]) {
+      groupedPlannings[stringifiedSection] = [];
+    }
+
+    groupedPlannings[stringifiedSection].push(planning);
+  });
+
+  return groupedPlannings;
+};
+
+export { groupApartmentsByRoomsCount, groupApartmentPlanningsBySection };

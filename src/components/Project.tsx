@@ -3,9 +3,14 @@ import { useState } from "react";
 import Carousel from "antd/lib/carousel";
 import { BiPlayCircle } from "react-icons/bi";
 
+import ProjectCarousel from "./ProjectCarousel";
 import ApartmentDetail from "./ApartmentDetail";
+import ApartmentPlanningImg from "./ApartmentPlanningImg";
 import Modal from "./Modal";
-import groupApartmentsByRoomsCount from "../utils";
+import {
+  groupApartmentsByRoomsCount,
+  groupApartmentPlanningsBySection,
+} from "../utils";
 import ProjectType from "../types/Project";
 
 interface ProjectProps {
@@ -27,65 +32,88 @@ const Project = ({ project }: ProjectProps) => {
   const handleModalClose = () => setModalState(undefined);
 
   const groupedApartments = groupApartmentsByRoomsCount(project.apartments);
+  const groupedApartmentPlannings = groupApartmentPlanningsBySection(
+    project.apartmentPlannings,
+  );
 
   const apartmentsView = Object.keys(groupedApartments).map((key) => (
-    <div
-      key={key}
-      className="flex flex-col gap-4 overflow-hidden rounded bg-charcoal shadow-lg shadow-white"
+    <ProjectCarousel
+      key={`apartment_${key}`}
+      title={`${key}-кімнатні квартири`}
     >
-      <h3 className="p-2 text-base font-medium text-primary sm:p-3 sm:text-lg xl:p-4 xl:text-xl">
-        {key}-кімнатні квартири
-      </h3>
+      {groupedApartments[key].map((apartment, i) => (
+        <div key={i}>
+          <ApartmentPlanningImg
+            src={apartment.imgUrl}
+            onClick={() =>
+              apartment.imgUrl && handleModalOpen("img", apartment.imgUrl)
+            }
+          />
 
-      <Carousel dotPosition="top" className="overflow-hidden rounded">
-        {groupedApartments[key].map((apartment, i) => (
+          <div className="p-2 sm:p-3 xl:p-4">
+            <h3 className="text-lg font-medium text-primary sm:text-xl xl:text-2xl">
+              {apartment.pricePerSquareMeter} $ за{" "}
+              <span className="text-primary">
+                м<sup className="text-primary">2</sup>
+              </span>
+            </h3>
+
+            <div className="mt-4 grid grid-cols-2 gap-2 text-sm sm:mt-4 sm:text-base xl:mt-6 xl:text-lg">
+              <ApartmentDetail type="rooms">
+                {apartment.roomsCount}{" "}
+                {apartment.roomsCount === 1 ? "кімната" : "кімнати"}
+              </ApartmentDetail>
+              <ApartmentDetail type="section">
+                секція {apartment.sectionNumber}
+              </ApartmentDetail>
+              <ApartmentDetail type="area">
+                {apartment.area}{" "}
+                <span>
+                  м<sup>2</sup>
+                </span>
+              </ApartmentDetail>
+              <ApartmentDetail type="release">
+                {apartment.releaseDate}
+              </ApartmentDetail>
+              <ApartmentDetail type="floors">
+                {apartment.floors} поверхи
+              </ApartmentDetail>
+              <ApartmentDetail type="status">
+                {apartment.status}
+              </ApartmentDetail>
+            </div>
+          </div>
+        </div>
+      ))}
+    </ProjectCarousel>
+  ));
+
+  const apartmentPlanningsView = Object.keys(groupedApartmentPlannings).map(
+    (key) => (
+      <ProjectCarousel
+        key={`apartment_planning_${key}`}
+        title={`Секція ${key}`}
+      >
+        {groupedApartmentPlannings[key].map((planning, i) => (
           <div key={i}>
-            <img
-              src={apartment.imgUrl || "/noImage.svg"}
-              alt="planning"
-              className="h-48 w-full cursor-pointer object-contain xl:h-60"
-              onClick={() =>
-                apartment.imgUrl && handleModalOpen("img", apartment.imgUrl)
-              }
+            <ApartmentPlanningImg
+              src={planning.imgUrl}
+              onClick={() => handleModalOpen("img", planning.imgUrl)}
             />
 
             <div className="p-2 sm:p-3 xl:p-4">
-              <h3 className="text-lg font-medium text-primary sm:text-xl xl:text-2xl">
-                {apartment.pricePerSquareMeter} $ за{" "}
-                <span className="text-primary">
-                  м<sup className="text-primary">2</sup>
-                </span>
-              </h3>
-              <div className="mt-4 grid grid-cols-2 gap-2 text-sm sm:mt-4 sm:text-base xl:mt-6 xl:text-lg">
+              <div className="text-sm sm:text-base xl:text-lg">
                 <ApartmentDetail type="rooms">
-                  {apartment.roomsCount}{" "}
-                  {apartment.roomsCount === 1 ? "кімната" : "кімнати"}
-                </ApartmentDetail>
-                <ApartmentDetail type="section">
-                  секція {apartment.sectionNumber}
-                </ApartmentDetail>
-                <ApartmentDetail type="area">
-                  {apartment.area}{" "}
-                  <span>
-                    м<sup>2</sup>
-                  </span>
-                </ApartmentDetail>
-                <ApartmentDetail type="release">
-                  {apartment.releaseDate}
-                </ApartmentDetail>
-                <ApartmentDetail type="floors">
-                  {apartment.floors} поверхи
-                </ApartmentDetail>
-                <ApartmentDetail type="status">
-                  {apartment.status}
+                  {planning.roomsCount}{" "}
+                  {planning.roomsCount === 1 ? "кімната" : "кімнати"}
                 </ApartmentDetail>
               </div>
             </div>
           </div>
         ))}
-      </Carousel>
-    </div>
-  ));
+      </ProjectCarousel>
+    ),
+  );
 
   return (
     <div className="flex flex-col gap-12 sm:gap-16 xl:gap-20">
@@ -145,6 +173,7 @@ const Project = ({ project }: ProjectProps) => {
 
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
           {apartmentsView}
+          {apartmentPlanningsView}
         </div>
       </div>
 
