@@ -6,12 +6,17 @@ import { BiPlayCircle } from "react-icons/bi";
 import ProjectCarousel from "./ProjectCarousel";
 import ApartmentDetail from "./ApartmentDetail";
 import ApartmentPlanningImg from "./ApartmentPlanningImg";
+import ProjectDetail from "./ProjectDetail";
 import Modal from "./Modal";
 import {
   groupApartmentsByRoomsCount,
   groupApartmentPlanningsBySection,
+  findLeastPricePerSquareMeter,
 } from "../utils";
-import ProjectType from "../types/Project";
+import type {
+  Project as ProjectType,
+  ProjectCharacterization,
+} from "../types/Project";
 
 interface ProjectProps {
   project: ProjectType;
@@ -115,6 +120,16 @@ const Project = ({ project }: ProjectProps) => {
     ),
   );
 
+  const projectCharacterizationView = Object.keys(project.characterization)
+    .sort()
+    .map((key) => (
+      <ProjectDetail
+        key={key}
+        type={key as keyof ProjectCharacterization}
+        value={project.characterization[key as keyof ProjectCharacterization]}
+      />
+    ));
+
   return (
     <div className="flex flex-col gap-12 sm:gap-16 xl:gap-20">
       <div className="flex flex-col gap-8 sm:flex-row">
@@ -139,7 +154,7 @@ const Project = ({ project }: ProjectProps) => {
               {project.address}
             </span>
             <span className="mt-4 font-medium text-primary sm:mt-6 sm:text-lg xl:mt-8 xl:text-xl">
-              від {project.startPricePerSquareMeter} $/м
+              від {findLeastPricePerSquareMeter(project.apartments)} $/м
               <sup className="text-primary">2</sup>
             </span>
           </div>
@@ -174,6 +189,16 @@ const Project = ({ project }: ProjectProps) => {
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
           {apartmentsView}
           {apartmentPlanningsView}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-6">
+        <h2 className="text-xl font-bold sm:text-2xl xl:text-3xl">
+          Характеристика
+        </h2>
+
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+          {projectCharacterizationView}
         </div>
       </div>
 

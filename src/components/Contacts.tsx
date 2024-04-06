@@ -1,15 +1,19 @@
+import { ReactElement } from "react";
+
 import { BiPhone, BiEnvelope } from "react-icons/bi";
 
 import Section from "./Section";
-import Contact from "../types/Contact";
+import { Contact, ContactType } from "../types/Contact";
 
 interface ContactsProps {
   contacts: Contact[];
 }
 
-const contactIconMap = {
-  phone: <BiPhone />,
-  email: <BiEnvelope />,
+const iconStyles = "w-6 h-6 sm:w-7 sm:h-7 xl:w-8 xl:h-8 fill-white";
+
+const contactIconMap: Record<ContactType, ReactElement> = {
+  phone: <BiPhone className={iconStyles} />,
+  email: <BiEnvelope className={iconStyles} />,
 };
 
 const Contacts = ({ contacts }: ContactsProps) => (
@@ -19,7 +23,8 @@ const Contacts = ({ contacts }: ContactsProps) => (
         key={i}
         className="flex items-center gap-2 text-lg sm:text-xl xl:text-2xl"
       >
-        {contactIconMap[contact.type]} <span>{contact.value}</span>
+        <span className={iconStyles}>{contactIconMap[contact.type]}</span>
+        <span>{contact.value}</span>
       </div>
     ))}
   </Section>

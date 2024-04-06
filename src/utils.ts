@@ -1,5 +1,4 @@
-import Apartment from "./types/Apartment";
-import ApartmentPlanning from "./types/ApartmentPlanning";
+import type { Apartment, ApartmentPlanning } from "./types/Apartment";
 
 const groupApartmentsByRoomsCount = (apartments: Apartment[]) => {
   const groupedApartments: Record<string, Apartment[]> = {};
@@ -37,4 +36,17 @@ const groupApartmentPlanningsBySection = (
   return groupedPlannings;
 };
 
-export { groupApartmentsByRoomsCount, groupApartmentPlanningsBySection };
+const findLeastPricePerSquareMeter = (apartments: Apartment[]) => {
+  if (apartments.length === 0) return;
+
+  return apartments.reduce(
+    (acc, apartment) => Math.min(apartment.pricePerSquareMeter, acc),
+    apartments[0].pricePerSquareMeter,
+  );
+};
+
+export {
+  groupApartmentsByRoomsCount,
+  groupApartmentPlanningsBySection,
+  findLeastPricePerSquareMeter,
+};

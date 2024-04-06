@@ -15,7 +15,7 @@ const Hero = () => (
     </h1>
     <a
       href="#projects"
-      className="border border-primary bg-deep-black px-4 py-2 font-medium text-primary sm:px-6 sm:text-lg xl:px-8 xl:py-3 xl:text-xl"
+      className="border border-primary bg-deep-black px-4 py-2 font-medium text-primary transition-colors hover:border-white hover:text-white sm:px-6 sm:text-lg xl:px-8 xl:py-3 xl:text-xl"
     >
       Наші проєкти
     </a>

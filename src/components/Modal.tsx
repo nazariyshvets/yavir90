@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
+
 import { BiFullscreen, BiExitFullscreen } from "react-icons/bi";
 
 interface ModalProps {

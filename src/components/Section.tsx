@@ -10,6 +10,7 @@ interface SectionProps {
 const Section = ({ id, title, children }: PropsWithChildren<SectionProps>) => (
   <section id={id} className="px-4 sm:px-12 xl:px-24">
     {title && <SectionTitle>{title}</SectionTitle>}
+
     <div>{children}</div>
   </section>
 );

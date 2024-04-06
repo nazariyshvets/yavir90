@@ -1,6 +1,6 @@
 import Section from "./Section";
 import Project from "./Project";
-import ProjectType from "../types/Project";
+import { Project as ProjectType } from "../types/Project";
 
 interface ProjectsListProps {
   projects: ProjectType[];

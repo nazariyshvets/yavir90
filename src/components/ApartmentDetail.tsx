@@ -1,4 +1,5 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactElement } from "react";
+
 import {
   BiBed,
   BiCubeAlt,
@@ -8,13 +9,15 @@ import {
   BiHardHat,
 } from "react-icons/bi";
 
+import type { ApartmentDetailType } from "../types/Apartment";
+
 interface ApartmentDetailProps {
-  type: "rooms" | "section" | "area" | "release" | "floors" | "status";
+  type: ApartmentDetailType;
 }
 
-const iconStyles = "h-5 w-5 fill-primary";
+const iconStyles = "h-5 w-5 sm:h-6 sm:w-6 xl:h-7 xl:w-7 fill-primary";
 
-const typeIconMap = {
+const typeIconMap: Record<ApartmentDetailType, ReactElement> = {
   rooms: <BiBed className={iconStyles} />,
   section: <BiCubeAlt className={iconStyles} />,
   area: <BiFullscreen className={iconStyles} />,
@@ -28,7 +31,7 @@ const ApartmentDetail = ({
   children,
 }: PropsWithChildren<ApartmentDetailProps>) => (
   <div className="flex items-center gap-2">
-    {typeIconMap[type]}
+    <span className={iconStyles}>{typeIconMap[type]}</span>
     <div>{children}</div>
   </div>
 );
