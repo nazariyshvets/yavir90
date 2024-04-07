@@ -1,4 +1,4 @@
-import { Apartment, ApartmentPlanning } from "./Apartment";
+import { Apartment } from "./Apartment";
 
 export interface Project {
   photoUrls: string[];
@@ -6,7 +6,6 @@ export interface Project {
   address: string;
   apartments: Apartment[];
   videoUrl: string | null;
-  apartmentPlannings: ApartmentPlanning[];
   characterization: ProjectCharacterization;
 }
 

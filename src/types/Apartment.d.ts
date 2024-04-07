@@ -7,6 +7,7 @@ export interface Apartment {
   floors: string;
   status: string;
   imgUrl: string | null;
+  isCommercial?: boolean;
 }
 
 export type ApartmentDetailType =
@@ -16,9 +17,3 @@ export type ApartmentDetailType =
   | "release"
   | "floors"
   | "status";
-
-export interface ApartmentPlanning {
-  imgUrl: string;
-  roomsCount: number;
-  section: number;
-}

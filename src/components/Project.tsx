@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import Carousel from "antd/lib/carousel";
 import { BiPlayCircle } from "react-icons/bi";
 
@@ -10,13 +11,14 @@ import ProjectDetail from "./ProjectDetail";
 import Modal from "./Modal";
 import {
   groupApartmentsByRoomsCount,
-  groupApartmentPlanningsBySection,
   findLeastPricePerSquareMeter,
 } from "../utils";
 import type {
   Project as ProjectType,
   ProjectCharacterization,
 } from "../types/Project";
+
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 interface ProjectProps {
   project: ProjectType;
@@ -37,88 +39,64 @@ const Project = ({ project }: ProjectProps) => {
   const handleModalClose = () => setModalState(undefined);
 
   const groupedApartments = groupApartmentsByRoomsCount(project.apartments);
-  const groupedApartmentPlannings = groupApartmentPlanningsBySection(
-    project.apartmentPlannings,
-  );
 
   const apartmentsView = Object.keys(groupedApartments).map((key) => (
     <ProjectCarousel
-      key={`apartment_${key}`}
-      title={`${key}-кімнатні квартири`}
+      key={key}
+      title={
+        key === "commercial"
+          ? "Комерційні планування"
+          : `${key}-кімнатні квартири`
+      }
     >
-      {groupedApartments[key].map((apartment, i) => (
-        <div key={i}>
-          <ApartmentPlanningImg
-            src={apartment.imgUrl}
-            onClick={() =>
-              apartment.imgUrl && handleModalOpen("img", apartment.imgUrl)
-            }
-          />
-
-          <div className="p-2 sm:p-3 xl:p-4">
-            <h3 className="text-lg font-medium text-primary sm:text-xl xl:text-2xl">
-              {apartment.pricePerSquareMeter} $ за{" "}
-              <span className="text-primary">
-                м<sup className="text-primary">2</sup>
-              </span>
-            </h3>
-
-            <div className="mt-4 grid grid-cols-2 gap-2 text-sm sm:mt-4 sm:text-base xl:mt-6 xl:text-lg">
-              <ApartmentDetail type="rooms">
-                {apartment.roomsCount}{" "}
-                {apartment.roomsCount === 1 ? "кімната" : "кімнати"}
-              </ApartmentDetail>
-              <ApartmentDetail type="section">
-                секція {apartment.sectionNumber}
-              </ApartmentDetail>
-              <ApartmentDetail type="area">
-                {apartment.area}{" "}
-                <span>
-                  м<sup>2</sup>
-                </span>
-              </ApartmentDetail>
-              <ApartmentDetail type="release">
-                {apartment.releaseDate}
-              </ApartmentDetail>
-              <ApartmentDetail type="floors">
-                {apartment.floors} поверхи
-              </ApartmentDetail>
-              <ApartmentDetail type="status">
-                {apartment.status}
-              </ApartmentDetail>
-            </div>
-          </div>
-        </div>
-      ))}
-    </ProjectCarousel>
-  ));
-
-  const apartmentPlanningsView = Object.keys(groupedApartmentPlannings).map(
-    (key) => (
-      <ProjectCarousel
-        key={`apartment_planning_${key}`}
-        title={`Секція ${key}`}
-      >
-        {groupedApartmentPlannings[key].map((planning, i) => (
+      {groupedApartments[key]
+        .sort((a, b) => a.area - b.area)
+        .map((apartment, i) => (
           <div key={i}>
             <ApartmentPlanningImg
-              src={planning.imgUrl}
-              onClick={() => handleModalOpen("img", planning.imgUrl)}
+              src={apartment.imgUrl}
+              onClick={() =>
+                apartment.imgUrl && handleModalOpen("img", apartment.imgUrl)
+              }
             />
 
             <div className="p-2 sm:p-3 xl:p-4">
-              <div className="text-sm sm:text-base xl:text-lg">
+              <h3 className="text-lg font-medium text-primary sm:text-xl xl:text-2xl">
+                {apartment.pricePerSquareMeter} $ за{" "}
+                <span className="text-primary">
+                  м<sup className="text-primary">2</sup>
+                </span>
+              </h3>
+
+              <div className="mt-4 grid grid-cols-2 gap-2 text-sm sm:mt-4 sm:text-base xl:mt-6 xl:text-lg">
                 <ApartmentDetail type="rooms">
-                  {planning.roomsCount}{" "}
-                  {planning.roomsCount === 1 ? "кімната" : "кімнати"}
+                  {apartment.roomsCount}{" "}
+                  {apartment.roomsCount === 1 ? "кімната" : "кімнати"}
+                </ApartmentDetail>
+                <ApartmentDetail type="section">
+                  секція {apartment.sectionNumber}
+                </ApartmentDetail>
+                <ApartmentDetail type="area">
+                  {apartment.area}{" "}
+                  <span>
+                    м<sup>2</sup>
+                  </span>
+                </ApartmentDetail>
+                <ApartmentDetail type="release">
+                  {apartment.releaseDate}
+                </ApartmentDetail>
+                <ApartmentDetail type="floors">
+                  {apartment.floors} поверхи
+                </ApartmentDetail>
+                <ApartmentDetail type="status">
+                  {apartment.status}
                 </ApartmentDetail>
               </div>
             </div>
           </div>
         ))}
-      </ProjectCarousel>
-    ),
-  );
+    </ProjectCarousel>
+  ));
 
   const projectCharacterizationView = Object.keys(project.characterization)
     .sort()
@@ -136,10 +114,12 @@ const Project = ({ project }: ProjectProps) => {
         <div className="flex flex-1 flex-col overflow-hidden rounded bg-charcoal shadow-lg shadow-white">
           <Carousel autoplay>
             {project.photoUrls.map((url) => (
-              <img
+              <LazyLoadImage
                 key={url}
                 src={url}
                 alt="building"
+                width="100%"
+                effect="blur"
                 className="h-48 w-full cursor-pointer object-cover xl:h-60"
                 onClick={() => handleModalOpen("img", url)}
               />
@@ -188,7 +168,6 @@ const Project = ({ project }: ProjectProps) => {
 
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
           {apartmentsView}
-          {apartmentPlanningsView}
         </div>
       </div>
 

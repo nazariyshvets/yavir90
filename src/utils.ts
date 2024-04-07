@@ -1,39 +1,27 @@
-import type { Apartment, ApartmentPlanning } from "./types/Apartment";
+import type { Apartment } from "./types/Apartment";
 
 const groupApartmentsByRoomsCount = (apartments: Apartment[]) => {
   const groupedApartments: Record<string, Apartment[]> = {};
 
   apartments.forEach((apartment) => {
-    const { roomsCount } = apartment;
-    const stringifiedRoomsCount = roomsCount.toString();
+    const { roomsCount, isCommercial } = apartment;
 
-    if (!groupedApartments[stringifiedRoomsCount]) {
-      groupedApartments[stringifiedRoomsCount] = [];
+    if (!isCommercial) {
+      const stringifiedRoomsCount = roomsCount.toString();
+
+      if (!groupedApartments[stringifiedRoomsCount])
+        groupedApartments[stringifiedRoomsCount] = [];
+
+      groupedApartments[stringifiedRoomsCount].push(apartment);
+    } else {
+      if (!groupedApartments["commercial"])
+        groupedApartments["commercial"] = [];
+
+      groupedApartments["commercial"].push(apartment);
     }
-
-    groupedApartments[stringifiedRoomsCount].push(apartment);
   });
 
   return groupedApartments;
-};
-
-const groupApartmentPlanningsBySection = (
-  apartmentPlannings: ApartmentPlanning[],
-) => {
-  const groupedPlannings: Record<string, ApartmentPlanning[]> = {};
-
-  apartmentPlannings.forEach((planning) => {
-    const { section } = planning;
-    const stringifiedSection = section.toString();
-
-    if (!groupedPlannings[stringifiedSection]) {
-      groupedPlannings[stringifiedSection] = [];
-    }
-
-    groupedPlannings[stringifiedSection].push(planning);
-  });
-
-  return groupedPlannings;
 };
 
 const findLeastPricePerSquareMeter = (apartments: Apartment[]) => {
@@ -45,8 +33,4 @@ const findLeastPricePerSquareMeter = (apartments: Apartment[]) => {
   );
 };
 
-export {
-  groupApartmentsByRoomsCount,
-  groupApartmentPlanningsBySection,
-  findLeastPricePerSquareMeter,
-};
+export { groupApartmentsByRoomsCount, findLeastPricePerSquareMeter };
